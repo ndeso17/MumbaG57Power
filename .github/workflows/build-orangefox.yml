@@ -201,6 +201,7 @@ jobs:
           BOARD_KERNEL_IMAGE_NAME := Image
           
           TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/Image
+          BOARD_INCLUDE_DTB_IN_BOOTIMG := true
           BOARD_PREBUILT_DTBIMAGE_DIR := $(DEVICE_PATH)/prebuilt/dtbs
           BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilt/dtbo.img
           
