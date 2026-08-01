@@ -284,7 +284,7 @@ jobs:
 
 
       - name: Build OrangeFox Recovery
-        working-directory: ~/fox_build
+        working-directory: /home/runner/fox_build
         env:
           FOX_BUILD_DEVICE: mumba
           OF_MAINTAINER: ndeso17
