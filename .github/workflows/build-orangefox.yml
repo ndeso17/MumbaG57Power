@@ -141,8 +141,8 @@ jobs:
             https://gitlab.com/OrangeFox/bootable/Recovery.git \
             bootable/recovery
           git clone --depth=1 \
-            -b fox_12.1 \
-            https://gitlab.com/OrangeFox/vendor/recovery.git \
+            -b android-12.1 \
+            https://github.com/omnirom/android_vendor_omni.git \
             vendor/omni
 
       - name: Copy prebuilt kernel and DTB to fox_build
