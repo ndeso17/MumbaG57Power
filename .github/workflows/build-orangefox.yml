@@ -140,12 +140,10 @@ jobs:
             -b fox_12.1 \
             https://gitlab.com/OrangeFox/bootable/Recovery.git \
             bootable/recovery
-          # Clone OrangeFox vendor
-          mkdir -p vendor/recovery
           git clone --depth=1 \
             -b fox_12.1 \
             https://gitlab.com/OrangeFox/vendor/recovery.git \
-            vendor/recovery
+            vendor/omni
 
       - name: Copy prebuilt kernel and DTB to fox_build
         run: |
