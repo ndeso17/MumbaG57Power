@@ -144,50 +144,13 @@ jobs:
             https://gitlab.com/OrangeFox/vendor/recovery.git \
             vendor/recovery
 
-      - name: Extract device tree from kernel DTB
-        working-directory: kernel/
+      - name: Copy prebuilt kernel and DTB to fox_build
         run: |
-          export PATH="$CLANG_PATH:$PATH"
-          export CROSS_COMPILE=aarch64-linux-gnu-
-          export CROSS_COMPILE_ARM32=arm-linux-gnueabi-
-          export CLANG_TRIPLE=aarch64-linux-gnu-
-          export CC=clang
-          export KCFLAGS="-Wno-default-const-init-var-unsafe"
-          
-          make O=out ARCH=arm64 \
-            CC=clang \
-            CLANG_TRIPLE=aarch64-linux-gnu- \
-            CROSS_COMPILE=aarch64-linux-gnu- \
-            KCFLAGS="$KCFLAGS" \
-            ${{ env.DEFCONFIG }}
-          
-          make O=out ARCH=arm64 \
-            CC=clang \
-            CLANG_TRIPLE=aarch64-linux-gnu- \
-            CROSS_COMPILE=aarch64-linux-gnu- \
-            KCFLAGS="$KCFLAGS" \
-            dtbs -j$(nproc)
-          
-          find out/arch/arm64/boot/dts -name "*.dtb" | head -5
-          ls out/arch/arm64/boot/dts/ || true
-
-      - name: Build kernel for recovery
-        working-directory: kernel/
-        run: |
-          export PATH="$CLANG_PATH:$PATH"
-          export CROSS_COMPILE=aarch64-linux-gnu-
-          export CROSS_COMPILE_ARM32=arm-linux-gnueabi-
-          export CLANG_TRIPLE=aarch64-linux-gnu-
-          export CC=clang
-          export KCFLAGS="-Wno-default-const-init-var-unsafe"
-          
-          make O=out ARCH=arm64 \
-            CC=clang \
-            CLANG_TRIPLE=aarch64-linux-gnu- \
-            CROSS_COMPILE=aarch64-linux-gnu- \
-            CROSS_COMPILE_COMPAT=arm-linux-gnueabi- \
-            KCFLAGS="$KCFLAGS" \
-            -j$(nproc) 2>&1 | tee ../build.log
+          mkdir -p $HOME/fox_build/device/${{ env.DEVICE_MANUFACTURER }}/${{ env.DEVICE_CODENAME }}/prebuilt/dtbs
+          cp $GITHUB_WORKSPACE/prebuilt/kernel \
+            $HOME/fox_build/device/${{ env.DEVICE_MANUFACTURER }}/${{ env.DEVICE_CODENAME }}/prebuilt/Image
+          cp $GITHUB_WORKSPACE/prebuilt/dtbs/*.dtb \
+            $HOME/fox_build/device/${{ env.DEVICE_MANUFACTURER }}/${{ env.DEVICE_CODENAME }}/prebuilt/dtbs/
 
       - name: Generate device tree for OrangeFox
         run: |
@@ -316,20 +279,6 @@ jobs:
           
           echo "Device tree generated at ~/fox_build/device/motorola/mumba"
 
-      - name: Copy prebuilt kernel to device tree
-        run: |
-          mkdir -p ~/fox_build/device/${{ env.DEVICE_MANUFACTURER }}/${{ env.DEVICE_CODENAME }}/prebuilt/dtbs
-          
-          # Copy kernel Image
-          cp $GITHUB_WORKSPACE/kernel/out/arch/arm64/boot/Image \
-            ~/fox_build/device/${{ env.DEVICE_MANUFACTURER }}/${{ env.DEVICE_CODENAME }}/prebuilt/Image
-          
-          # Copy DTB files
-          find $GITHUB_WORKSPACE/kernel/out/arch/arm64/boot/dts \
-            -name "*.dtb" \
-            -exec cp {} ~/fox_build/device/${{ env.DEVICE_MANUFACTURER }}/${{ env.DEVICE_CODENAME }}/prebuilt/dtbs/ \;
-          
-          echo "Prebuilt kernel files copied."
 
       - name: Build OrangeFox Recovery
         working-directory: ~/fox_build
