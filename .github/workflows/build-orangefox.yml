@@ -299,14 +299,13 @@ jobs:
           mkdir -p $GITHUB_WORKSPACE/output
           
           # Recovery image
-          cp ~/fox_build/out/target/product/mumba/OrangeFox*.img \
+          cp $HOME/fox_build/out/target/product/mumba/OrangeFox*.img \
             $GITHUB_WORKSPACE/output/ 2>/dev/null || \
-          cp ~/fox_build/out/target/product/mumba/recovery.img \
+          cp $HOME/fox_build/out/target/product/mumba/recovery.img \
             $GITHUB_WORKSPACE/output/OrangeFox-mumba-${{ env.BUILD_DATE }}.img 2>/dev/null || \
           echo "WARNING: recovery.img not found, check build log"
           
-          # Recovery zip (if generated)
-          cp ~/fox_build/out/target/product/mumba/OrangeFox*.zip \
+          cp $HOME/fox_build/out/target/product/mumba/OrangeFox*.zip \
             $GITHUB_WORKSPACE/output/ 2>/dev/null || true
           
           ls -lh $GITHUB_WORKSPACE/output/
